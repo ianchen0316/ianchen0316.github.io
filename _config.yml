@@ -1,3 +1,9 @@
 theme: jekyll-theme-minimal
 title: Ian's homepage
 description: Bookmark this to keep an eye on my project updates!
+
+nav:
+  - title: "Home"
+    url: "/"
+  - title: "Reading Notes"
+    url: "/reading-notes/"
