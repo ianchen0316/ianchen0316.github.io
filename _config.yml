@@ -1,9 +1,15 @@
-theme: jekyll-theme-minimal
-title: Ian's homepage
-description: Bookmark this to keep an eye on my project updates!
+title: Ian's Personal Blog
+description: Personal notes, implementations, and reflections.
+baseurl: ""  # Important: leave empty if using GitHub Pages at username.github.io
+url: "https://your-username.github.io"
 
-nav:
-  - title: "Home"
-    url: "/"
-  - title: "Reading Notes"
-    url: "/reading-notes/"
+theme: minima
+
+# Navigation (Minima theme)
+header_pages:
+  - study/index.md
+  - implementation/index.md
+  - diary/index.md
+
+# Optional: social links or future blog settings
+
