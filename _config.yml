@@ -8,8 +8,8 @@ theme: minima
 # Navigation (Minima theme)
 header_pages:
   - study/index.md
-  - implementation/index.md
-  - diary/index.md
+  - projects/index.md
+  - thoughts/index.md
 
 # Optional: social links or future blog settings
 
