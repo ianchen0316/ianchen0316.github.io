@@ -4,7 +4,7 @@ icon: fas fa-info-circle
 order: 4
 ---
 
-![image](/assets/avatar.jpg)
+![image](/assets/avatar.jpg){: width="300"}     
 
 # 👋 Hi!
 
