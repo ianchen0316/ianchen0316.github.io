@@ -1,3 +1,10 @@
+---
+title: Test
+date: 2026-01-19 19:49:20 +0800
+categories: ['LLM', 'Courses', '李宏毅']
+tags: ['LLM', 'Reasoning Model', '李宏毅']
+---
+
 # Reasoning Models
 
 # Introduction
