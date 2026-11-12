@@ -11,7 +11,10 @@ flowchart LR
   N[Notion AI/ML Roots] --> R[Read-only crawler]
   R --> F[Fingerprint / diff]
   F --> C[Heading classification]
-  C --> P[Private review digest]
+  F --> L[Opt-in OpenAI semantic extraction]
+  L --> V[Evidence/endpoint verification]
+  V --> P[Private review digest]
+  C --> P
   F --> M[Hashed manifest]
   M --> G[Curated metadata refresh]
   G --> S[GitHub Pages]
@@ -39,6 +42,8 @@ The crawler gathers all accessible pages within scope. For each page, it compute
 knowledge-graph/
   index.html             Public graph with curated nodes
   maintain.py            Notion crawler, page diff, candidate digest
+  semantic_extract.py     Strict LLM extraction and evidence validation
+  test_semantic_extract.py Offline provenance tests
   refresh_curated.py     Update source freshness on existing nodes only
   test_maintain.py       Offline unit tests
   state/manifest.json    Hashed page identifiers + fingerprints + edit timestamps
@@ -65,7 +70,7 @@ The public site remains a curated snapshot; automated detection does **not** pus
 
 1. Approved candidate queue with stable IDs and private storage.
 2. LLM-based concept extraction with citations to exact blocks.
-3. Semantic entity resolution and relationship inference with measured confidence.
+3. Cross-page entity resolution and relationship inference with measured confidence; per-page semantic proposals are already available as private opt-in email.
 4. Notion change-log database and approval UI; structural writes only after human approval.
 5. Event-driven scans plus weekly exhaustive reconciliation.
 
