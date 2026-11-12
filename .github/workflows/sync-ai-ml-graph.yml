@@ -25,6 +25,8 @@ jobs:
       - name: Inspect Notion and prepare private change digest
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_REVIEW_TOKEN: ${{ secrets.NOTION_REVIEW_TOKEN }}
+          NOTION_REVIEW_DATA_SOURCE_ID: ${{ vars.NOTION_REVIEW_DATA_SOURCE_ID }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-4o-mini' }}
           SEMANTIC_MAX_PAGES_PER_RUN: ${{ vars.SEMANTIC_MAX_PAGES_PER_RUN || '5' }}
@@ -42,6 +44,17 @@ jobs:
           fi
           python3 knowledge-graph/maintain.py
           python3 knowledge-graph/refresh_curated.py
+      - name: Publish Notion-approved concepts and relationships
+        id: review
+        env:
+          NOTION_REVIEW_TOKEN: ${{ secrets.NOTION_REVIEW_TOKEN }}
+          NOTION_REVIEW_DATA_SOURCE_ID: ${{ vars.NOTION_REVIEW_DATA_SOURCE_ID }}
+        run: |
+          if [ -n "$NOTION_REVIEW_TOKEN" ] && [ -n "$NOTION_REVIEW_DATA_SOURCE_ID" ]; then
+            python3 knowledge-graph/review_queue.py
+          else
+            echo "Private review queue not configured; skipping approved publication." >> "$GITHUB_STEP_SUMMARY"
+          fi
       - name: Commit approved public metadata and redacted fingerprints
         run: |
           git config user.name "github-actions[bot]"
@@ -51,3 +64,10 @@ jobs:
             git commit -m "chore: refresh curated graph source metadata"
             git push
           fi
+      - name: Mark committed queue items as Published
+        if: ${{ steps.review.outputs.applied != '' }}
+        env:
+          NOTION_REVIEW_TOKEN: ${{ secrets.NOTION_REVIEW_TOKEN }}
+          NOTION_REVIEW_DATA_SOURCE_ID: ${{ vars.NOTION_REVIEW_DATA_SOURCE_ID }}
+          APPLIED_REVIEW_IDS: ${{ steps.review.outputs.applied }}
+        run: python3 knowledge-graph/finalize_published.py
