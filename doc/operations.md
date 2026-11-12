@@ -33,7 +33,13 @@ Optional repository variables:
 | `SMTP_PORT` | `465` (TLS) |
 | `REPORT_EMAIL_FROM` | SMTP_USERNAME |
 
-The report contains page titles, Notion links and suggested heading classifications, so use a trusted email destination. No email is sent if SMTP settings are missing; the workflow summary then shows only aggregate counts.
+The report contains page titles, Notion links and suggested heading classifications, plus optional LLM concept/relation proposals with verbatim block quotes. Use a trusted email destination. No email is sent if SMTP settings are missing; the workflow summary then shows only aggregate counts.
+
+## 2a. Enable opt-in LLM semantic extraction
+
+Add the repository secret `OPENAI_API_KEY`. When this is configured, changed notes are sent to the OpenAI Responses API for strict structured concept and relationship extraction. The model defaults to `gpt-4o-mini`, configurable via repository variable `OPENAI_MODEL`. Other variables: `SEMANTIC_MAX_PAGES_PER_RUN` (default 5) and `SEMANTIC_BACKFILL_BASELINE` (default false). **Private SMTP delivery must be fully configured** or the pipeline rejects LLM extraction without transmitting page content.
+
+See [LLM semantic extraction](semantic-extraction.md) for evidence validation, privacy, costs, model limits, and failures.
 
 ## 3. Review a run
 
@@ -59,7 +65,7 @@ The state manifest is committed only by the workflow after a successful non-dry-
 - Current curated node names, summaries and Notion links are already public.
 - Never commit a detailed change report or raw Notion content.
 - The review digest is optional; GitHub logs expose only aggregate counts.
-- Heading-based classification is heuristic and does not extract high-quality concept relations.
+- Heading-based classification is heuristic; optional LLM extraction proposes richer concepts and relations but still requires human review.
 - The current graph does not yet edit Notion or support bidirectional synchronization.
 
 ## 6. Troubleshooting
