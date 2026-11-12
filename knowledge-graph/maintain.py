@@ -120,7 +120,7 @@ def snapshot_page(page_id: str) -> dict:
         "id": page_id,
         "title": title or "Untitled",
         "edited": page.get("last_edited_time"),
-        "fingerprint": digest(serialized),
+        "fingerprint": digest(title + "\n" + serialized),
         "headings": titles,
         "children": child_ids,
         "text": "\n".join(x["content"] for x in blocks if x["content"])[:18000],
