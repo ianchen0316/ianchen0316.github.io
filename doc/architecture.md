@@ -13,6 +13,9 @@ flowchart LR
   F --> C[Heading classification]
   F --> L[Opt-in OpenAI semantic extraction]
   L --> V[Evidence/endpoint verification]
+  V --> Q[Private Notion review queue]
+  Q --> A[Human approval / merge]
+  A --> S[Reviewed public graph]
   V --> P[Private review digest]
   C --> P
   F --> M[Hashed manifest]
@@ -43,6 +46,9 @@ knowledge-graph/
   index.html             Public graph with curated nodes
   maintain.py            Notion crawler, page diff, candidate digest
   semantic_extract.py     Strict LLM extraction and evidence validation
+  review_queue.py         Private Notion candidates + approved graph publisher
+  finalize_published.py  Notion review status finalization
+  test_review_queue.py    Offline publishing tests
   test_semantic_extract.py Offline provenance tests
   refresh_curated.py     Update source freshness on existing nodes only
   test_maintain.py       Offline unit tests
@@ -71,7 +77,7 @@ The public site remains a curated snapshot; automated detection does **not** pus
 1. Approved candidate queue with stable IDs and private storage.
 2. LLM-based concept extraction with citations to exact blocks.
 3. Cross-page entity resolution and relationship inference with measured confidence; per-page semantic proposals are already available as private opt-in email.
-4. Notion change-log database and approval UI; structural writes only after human approval.
+4. Improve the existing Notion review queue with a private review dashboard; structural edits to original notes remain out of scope.
 5. Event-driven scans plus weekly exhaustive reconciliation.
 
 ## Design constraint
