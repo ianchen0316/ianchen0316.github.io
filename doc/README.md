@@ -9,6 +9,7 @@
 - [Architecture](architecture.md) — components, data flow, graph publishing boundary, sync strategy
 - [Operations](operations.md) — setup, daily operation, security, reporting, troubleshooting
 - [Data model](data-model.md) — node types, edge types, provenance, manifest, review lifecycle
+- [LLM semantic extraction](semantic-extraction.md) — OpenAI structured outputs, evidence validation, private delivery
 
 ## Implementation status (November 2026)
 
@@ -23,11 +24,11 @@
 | Public-safe workflow summary | Implemented |
 | Private digest email | Implemented, needs SMTP secrets |
 | Daily GitHub Actions schedule | Configured, needs NOTION_TOKEN |
-| LLM-based concept and relationship extraction | Planned, NOT implemented |
+| LLM-based concept and relationship extraction | Implemented, opt-in with OPENAI_API_KEY and private SMTP delivery |
 | Semantic entity resolution and automatic merges | Planned, NOT implemented |
 | Notion page moves / writes | Not permitted by this pipeline |
 | Notion change-log database writes | Planned, not implemented |
 
 ## Safety principle
 
-This repository is public. The maintenance pipeline **never commits fetched Notion page bodies or raw private recommendations**. The site displays the currently curated graph. Newly discovered notes and heading proposals are sent only through explicitly configured private email. Even document titles and URLs can be sensitive; enable Notion access and email only after reviewing the publication policy.
+This repository is public. The maintenance pipeline **never commits fetched Notion page bodies or raw private recommendations**. The site displays the currently curated graph. Newly discovered notes and heading proposals are sent only through explicitly configured private email. Optional LLM semantic proposals include quoted source evidence and also require private email delivery. Even document titles and URLs can be sensitive; enable Notion access and email only after reviewing the publication policy.
