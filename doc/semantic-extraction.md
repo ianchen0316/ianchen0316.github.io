@@ -1,6 +1,6 @@
 # LLM-Powered Semantic Extraction
 
-**Status:** Implemented as an opt-in, private daily review pipeline. No live model call has been verified until credentials are configured.
+**Status:** Implemented as an opt-in, private daily review pipeline with optional persistent Notion review queue. No live model call has been verified until credentials are configured.
 
 ## Why this exists
 
@@ -59,7 +59,7 @@ In the repository's Settings → Secrets and variables → Actions:
 **Secrets**
 - `NOTION_TOKEN`: Notion integration with read access to selected AI/ML pages
 - `OPENAI_API_KEY`: API credential enabling semantic extraction
-- `SMTP_HOST`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `REPORT_EMAIL_TO`: mandatory for LLM extraction, providing a private delivery destination
+- Either private Notion queue (`NOTION_REVIEW_TOKEN` and `NOTION_REVIEW_DATA_SOURCE_ID`) **or** SMTP email credentials (`SMTP_HOST`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `REPORT_EMAIL_TO`) must be configured as a private review destination. Configure both for database review and an email digest.
 
 **Optional variables**
 - `OPENAI_MODEL`: defaults to `gpt-4o-mini`
@@ -67,7 +67,7 @@ In the repository's Settings → Secrets and variables → Actions:
 - `SEMANTIC_BACKFILL_BASELINE`: defaults to `false`
 - `SMTP_PORT`: defaults to `465`
 
-Setting `OPENAI_API_KEY` without private SMTP credentials causes the job to fail **before sending any content to the model**. Without `OPENAI_API_KEY`, the legacy non-LLM scan remains active.
+Setting `OPENAI_API_KEY` without either a private review queue or SMTP credentials causes the job to fail **before sending any content to the model**. Without `OPENAI_API_KEY`, the legacy non-LLM scan remains active.
 
 ## Privacy and safety
 
