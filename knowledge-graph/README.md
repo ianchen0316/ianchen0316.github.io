@@ -18,3 +18,7 @@ Interactive, publicly hosted pilot graph of curated AI/ML concepts with metadata
 6. Before enabling refresh, review publication risk: discovered page titles and links will be visible publicly.
 
 This is one-way sync (Notion → public site), and the pipeline does not edit Notion. **Opt-in LLM semantic extraction is implemented** for changed notes using `OPENAI_API_KEY`, with strict JSON schema, block-quote evidence verification and private SMTP email for review. LLM proposals are **not** published automatically. See [project documentation](../doc/README.md) and [semantic extraction](../doc/semantic-extraction.md). Notion embeds need the host to allow framing; otherwise use a regular page link.
+
+## Review and publish LLM proposals
+
+The private [Notion Concept Review Queue](../doc/review-queue.md) now supports Proposed → Approved / Rejected / Merge → Published. The pipeline enqueues new LLM concept and relation proposals when a separate review integration is configured, and only publishes manually approved metadata or reviewed source merges to the public graph. Raw Notion evidence is never published. Configure the GitHub secret `NOTION_REVIEW_TOKEN` and variable `NOTION_REVIEW_DATA_SOURCE_ID`; grant that integration access to the private Notion database. See [operations](../doc/operations.md) for activation.
