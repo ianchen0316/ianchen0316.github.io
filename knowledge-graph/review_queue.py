@@ -188,7 +188,7 @@ def apply_reviews(graph: dict, rows: list[dict]) -> tuple[dict, dict, list[str],
     nodes, edges = graph["nodes"], graph["edges"]
     counts = {"concepts": 0, "relations": 0, "merges": 0, "rejected": 0}
     applied, warnings = [], []
-    ordered = sorted(rows, key=lambda r: r.get("id", ""))
+    ordered = sorted(rows, key=lambda r: (0 if prop(r, "Kind") == "Concept" else 1, r.get("id", "")))
     for row in ordered:
         status, kind, label = prop(row, "Status"), prop(row, "Kind"), prop(row, "Name")
         if status == "Rejected":
