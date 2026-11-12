@@ -10,6 +10,7 @@
 - [Operations](operations.md) — setup, daily operation, security, reporting, troubleshooting
 - [Data model](data-model.md) — node types, edge types, provenance, manifest, review lifecycle
 - [LLM semantic extraction](semantic-extraction.md) — OpenAI structured outputs, evidence validation, private delivery
+- [Concept review queue](review-queue.md) — Notion approval, rejection, merging, and public graph publishing
 
 ## Implementation status (November 2026)
 
@@ -25,9 +26,9 @@
 | Private digest email | Implemented, needs SMTP secrets |
 | Daily GitHub Actions schedule | Configured, needs NOTION_TOKEN |
 | LLM-based concept and relationship extraction | Implemented, opt-in with OPENAI_API_KEY and private SMTP delivery |
-| Semantic entity resolution and automatic merges | Planned, NOT implemented |
+| Human-directed concept merges | Implemented via Notion review status, not automatic semantic resolution |
 | Notion page moves / writes | Not permitted by this pipeline |
-| Notion change-log database writes | Planned, not implemented |
+| Private Notion Concept Review Queue | Created; enqueue/publish code implemented, credentials required |
 
 ## Safety principle
 
