@@ -41,6 +41,10 @@ Add the repository secret `OPENAI_API_KEY`. When this is configured, changed not
 
 See [LLM semantic extraction](semantic-extraction.md) for evidence validation, privacy, costs, model limits, and failures.
 
+## 2b. Configure the private concept review queue
+
+The private database **AI & ML — Concept Review Queue** has been created in Notion. In GitHub Actions add the secret `NOTION_REVIEW_TOKEN` (a separate Notion integration with read, insert and update access only to that database) and variable `NOTION_REVIEW_DATA_SOURCE_ID` (from the Notion database's data-source settings). New LLM proposals are enqueued automatically when configured. Changing a row to Approved or Merge publishes approved metadata to the public graph during the next run; Rejected stays private. See [review queue](review-queue.md).
+
 ## 3. Review a run
 
 - Open the Actions run summary for pages scanned and counts added/modified/potentially missing.
@@ -64,7 +68,7 @@ The state manifest is committed only by the workflow after a successful non-dry-
 - GitHub Pages is public; anything committed to the graph JSON is public.
 - Current curated node names, summaries and Notion links are already public.
 - Never commit a detailed change report or raw Notion content.
-- The review digest is optional; GitHub logs expose only aggregate counts.
+- The review digest is optional when the private Notion review queue is configured; GitHub logs expose only aggregate counts.
 - Heading-based classification is heuristic; optional LLM extraction proposes richer concepts and relations but still requires human review.
 - The current graph does not yet edit Notion or support bidirectional synchronization.
 
