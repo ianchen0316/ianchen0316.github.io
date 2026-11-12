@@ -236,7 +236,7 @@ def mail_report(changes: list[dict], summary: dict) -> bool:
     msg["To"] = os.environ["REPORT_EMAIL_TO"]
     msg.set_content("\n".join(lines))
     host = os.environ["SMTP_HOST"]
-    port = int(os.getenv("SMTP_PORT", "465"))
+    port = int(os.getenv("SMTP_PORT") or "465")
     if port == 465:
         with smtplib.SMTP_SSL(host, port, context=ssl.create_default_context(), timeout=30) as smtp:
             smtp.login(os.environ["SMTP_USERNAME"], os.environ["SMTP_PASSWORD"])
