@@ -17,4 +17,4 @@ Interactive, publicly hosted pilot graph of curated AI/ML concepts with metadata
 5. By default, refresh runs daily at 01:30 UTC. If the secret is absent, it skips.
 6. Before enabling refresh, review publication risk: discovered page titles and links will be visible publicly.
 
-This is one-way sync (Notion → public site); it does not edit Notion or perform LLM-based concept extraction. Semantic candidate links require human review. Notion embeds need the host to allow framing; otherwise use a regular page link.
+This is one-way sync (Notion → public site), and the pipeline does not edit Notion. **Opt-in LLM semantic extraction is implemented** for changed notes using `OPENAI_API_KEY`, with strict JSON schema, block-quote evidence verification and private SMTP email for review. LLM proposals are **not** published automatically. See [project documentation](../doc/README.md) and [semantic extraction](../doc/semantic-extraction.md). Notion embeds need the host to allow framing; otherwise use a regular page link.
