@@ -19,6 +19,7 @@ import sys
 import time
 from email.message import EmailMessage
 import semantic_extract
+import review_queue
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote
 from urllib.request import Request, urlopen
@@ -230,9 +231,12 @@ def extract_semantic_changes(old: dict, new: dict, changes: list[dict],
                    semantic_concepts=0, semantic_relations=0, semantic_deferred=0)
     if not os.getenv("OPENAI_API_KEY"):
         return {}
-    if not all(os.getenv(k) for k in ("SMTP_HOST", "SMTP_USERNAME",
-                                     "SMTP_PASSWORD", "REPORT_EMAIL_TO")):
-        raise RuntimeError("LLM extraction requires configured private SMTP delivery")
+    private_mail = all(os.getenv(k) for k in ("SMTP_HOST", "SMTP_USERNAME",
+                                              "SMTP_PASSWORD", "REPORT_EMAIL_TO"))
+    private_queue = bool(os.getenv("NOTION_REVIEW_TOKEN") and
+                         os.getenv("NOTION_REVIEW_DATA_SOURCE_ID"))
+    if not (private_mail or private_queue):
+        raise RuntimeError("LLM extraction requires a private Notion review queue or private SMTP delivery")
     include_baseline = os.getenv("SEMANTIC_BACKFILL_BASELINE", "false").lower() == "true"
     eligible = [c for c in changes if c["kind"] in ("added", "modified")
                 or (include_baseline and c["kind"] == "baseline")]
@@ -257,6 +261,17 @@ def extract_semantic_changes(old: dict, new: dict, changes: list[dict],
         summary["semantic_concepts"] += len(proposal["concepts"])
         summary["semantic_relations"] += len(proposal["relations"])
     return results
+
+
+def save_review_candidates(proposals: dict, pages: dict, summary: dict) -> None:
+    """Persist proposals in a private Notion database when configured."""
+    summary["queue_created"] = 0
+    summary["queue_duplicates"] = 0
+    if not proposals or not (os.getenv("NOTION_REVIEW_TOKEN") and os.getenv("NOTION_REVIEW_DATA_SOURCE_ID")):
+        return
+    outcome = review_queue.enqueue(proposals, pages)
+    summary["queue_created"] = outcome["created"]
+    summary["queue_duplicates"] = outcome["duplicates"]
 
 
 def mail_report(changes: list[dict], summary: dict, semantic: dict | None = None) -> bool:
@@ -343,6 +358,7 @@ def main() -> None:
     # Do not transmit private content to the model or email in DRY_RUN.
     semantic = {} if DRY_RUN else extract_semantic_changes(old, new, changes, pages, summary)
     if not DRY_RUN:
+        save_review_candidates(semantic, pages, summary)
         # Deliver private review proposals before advancing the manifest.
         emailed = mail_report(changes, summary, semantic)
         STATE.parent.mkdir(exist_ok=True, parents=True)
