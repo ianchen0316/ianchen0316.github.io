@@ -6,7 +6,7 @@ Interactive, publicly hosted pilot graph of curated AI/ML concepts with metadata
 - 41 curated nodes, 16 candidate semantic links.
 - Node inspector shows summary, ID, hierarchy, review status, extraction method, keywords, source count and related nodes.
 - No full Notion page body is published. **Labels, node summaries, and original source URLs are public.**
-- Notion is the source of truth. The scheduled GitHub Actions workflow uses official Notion REST API and a read-only integration token to append headings and child pages.
+- Notion is the source of truth. The scheduled GitHub Actions workflow uses official Notion REST API and a read-only integration token to scan pages and refresh curated metadata. Newly discovered headings and LLM proposals are not directly published.
 
 ## Enable automatic refresh
 
