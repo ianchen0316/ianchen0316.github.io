@@ -64,7 +64,7 @@ This file contains no page titles, URLs, or bodies. Hashes are not encryption; p
 `detected → proposed → reviewed → approved/rejected → published`
 
 **Implemented:** detected/proposed from page headings and optional LLM extraction (definitions, proposed graph parents, relationships, and verbatim block evidence). These are reported by private email when configured.  
-**Not yet implemented:** persistent private approval queue and automatic publishing of approved proposals.
+**Implemented:** persistent private Notion review database and publishing of manually approved or merged concepts. The queue uses Proposed → Approved / Rejected / Merge → Published statuses. See [review queue](review-queue.md).
 
 ## Deduplication
 
