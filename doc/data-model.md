@@ -63,9 +63,9 @@ This file contains no page titles, URLs, or bodies. Hashes are not encryption; p
 
 `detected → proposed → reviewed → approved/rejected → published`
 
-**Implemented:** detected/proposed from page headings, reported in private email if SMTP is configured.  
+**Implemented:** detected/proposed from page headings and optional LLM extraction (definitions, proposed graph parents, relationships, and verbatim block evidence). These are reported by private email when configured.  
 **Not yet implemented:** persistent private approval queue and automatic publishing of approved proposals.
 
 ## Deduplication
 
-Distinct Notion notes may map to one semantic concept. Do not merge based on text similarity alone; preserve source links for each occurrence. New extracted relationships require evidence (Notion page/block location) and review status.
+Distinct Notion notes may map to one semantic concept. The semantic extractor currently deduplicates within a page only; cross-page resolution is planned. Do not merge based on text similarity alone; preserve source links for each occurrence. New extracted relationships require evidence (Notion page/block location) and review status.
