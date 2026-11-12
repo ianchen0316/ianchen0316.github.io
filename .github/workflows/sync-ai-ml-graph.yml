@@ -25,6 +25,10 @@ jobs:
       - name: Inspect Notion and prepare private change digest
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-4o-mini' }}
+          SEMANTIC_MAX_PAGES_PER_RUN: ${{ vars.SEMANTIC_MAX_PAGES_PER_RUN || '5' }}
+          SEMANTIC_BACKFILL_BASELINE: ${{ vars.SEMANTIC_BACKFILL_BASELINE || 'false' }}
           SMTP_HOST: ${{ secrets.SMTP_HOST }}
           SMTP_PORT: ${{ vars.SMTP_PORT }}
           SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
