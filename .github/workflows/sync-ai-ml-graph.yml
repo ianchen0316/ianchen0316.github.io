@@ -1,30 +1,49 @@
-name: Sync AI ML Knowledge Graph from Notion
+name: Maintain AI ML Knowledge Graph
 on:
   workflow_dispatch:
   schedule:
+    # 09:30 Taiwan time (UTC+8). GitHub schedules can be delayed.
     - cron: '30 1 * * *'
 permissions:
   contents: write
+concurrency:
+  group: ai-ml-knowledge-maintenance
+  cancel-in-progress: false
 jobs:
   update-graph:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Refresh from approved Notion roots (read-only)
+      - name: Run offline tests
+        run: python3 -m unittest discover -s knowledge-graph -p 'test_*.py' -v
+      - name: Inspect Notion and prepare private change digest
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ vars.SMTP_PORT }}
+          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          REPORT_EMAIL_TO: ${{ secrets.REPORT_EMAIL_TO }}
+          REPORT_EMAIL_FROM: ${{ vars.REPORT_EMAIL_FROM }}
         run: |
           if [ -z "$NOTION_TOKEN" ]; then
-            echo "NOTION_TOKEN secret is not configured; leaving published graph unchanged."
+            echo "NOTION_TOKEN not configured; skipping sync." >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
-          python3 knowledge-graph/sync_notion.py
-      - name: Commit refreshed site
+          python3 knowledge-graph/maintain.py
+          python3 knowledge-graph/refresh_curated.py
+      - name: Commit approved public metadata and redacted fingerprints
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add knowledge-graph/index.html
-          git diff --cached --quiet || (git commit -m "chore: sync AI ML graph from Notion" && git push)
+          git add knowledge-graph/index.html knowledge-graph/state/manifest.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: refresh curated graph source metadata"
+            git push
+          fi
