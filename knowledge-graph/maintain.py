@@ -18,6 +18,7 @@ import ssl
 import sys
 import time
 from email.message import EmailMessage
+import semantic_extract
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote
 from urllib.request import Request, urlopen
@@ -124,6 +125,7 @@ def snapshot_page(page_id: str) -> dict:
         "children": child_ids,
         "text": "\n".join(x["content"] for x in blocks if x["content"])[:18000],
         "block_count": count,
+        "evidence_blocks": blocks,
         "url": page.get("url") or "https://www.notion.so/" + page_id.replace("-", ""),
     }
 
@@ -184,7 +186,7 @@ def classify(title: str, text: str) -> dict:
     }
 
 
-def compare(old: dict, pages: dict, warnings: list[str]) -> tuple[dict, list[dict]]:
+def compare(old: dict, pages: dict, warnings: list[str]) -> tuple[dict, list[dict], dict]:
     previous = old.get("pages", {})
     current = {key: safe_public_state(page) for key, page in pages.items()}
     first = old.get("last_successful_sync") is None
@@ -196,7 +198,7 @@ def compare(old: dict, pages: dict, warnings: list[str]) -> tuple[dict, list[dic
         if change:
             headings = page["headings"][:12]
             changes.append({
-                "kind": change, "title": page["title"], "url": page["url"],
+                "kind": change, "title": page["title"], "url": page["url"], "page_key": key,
                 "headings": [h["title"] for h in headings],
                 "suggestions": [
                     {"concept": h["title"], **classify(h["title"], page["text"])}
@@ -220,7 +222,44 @@ def compare(old: dict, pages: dict, warnings: list[str]) -> tuple[dict, list[dic
     return {"version": 1, "pages": current, "last_successful_sync": summary["generated_at_utc"]}, changes, summary
 
 
-def mail_report(changes: list[dict], summary: dict) -> bool:
+
+def extract_semantic_changes(old: dict, new: dict, changes: list[dict],
+                             pages: dict, summary: dict) -> dict:
+    """Bounded extraction; defer excess pages by preserving old fingerprints."""
+    summary.update(semantic_status="disabled", semantic_pages=0,
+                   semantic_concepts=0, semantic_relations=0, semantic_deferred=0)
+    if not os.getenv("OPENAI_API_KEY"):
+        return {}
+    if not all(os.getenv(k) for k in ("SMTP_HOST", "SMTP_USERNAME",
+                                     "SMTP_PASSWORD", "REPORT_EMAIL_TO")):
+        raise RuntimeError("LLM extraction requires configured private SMTP delivery")
+    include_baseline = os.getenv("SEMANTIC_BACKFILL_BASELINE", "false").lower() == "true"
+    eligible = [c for c in changes if c["kind"] in ("added", "modified")
+                or (include_baseline and c["kind"] == "baseline")]
+    eligible.sort(key=lambda c: c["page_key"])
+    limit = int(os.getenv("SEMANTIC_MAX_PAGES_PER_RUN", "5"))
+    if limit < 1:
+        raise ValueError("SEMANTIC_MAX_PAGES_PER_RUN must be positive")
+    selected, deferred = eligible[:limit], eligible[limit:]
+    for item in deferred:
+        key = item["page_key"]
+        if key in old.get("pages", {}):
+            new["pages"][key] = old["pages"][key]
+        else:
+            new["pages"].pop(key, None)
+    summary["semantic_deferred"] = len(deferred)
+    summary["semantic_status"] = "enabled"
+    results = {}
+    for entry in selected:
+        proposal = semantic_extract.extract(pages[entry["page_key"]])
+        results[entry["page_key"]] = proposal
+        summary["semantic_pages"] += 1
+        summary["semantic_concepts"] += len(proposal["concepts"])
+        summary["semantic_relations"] += len(proposal["relations"])
+    return results
+
+
+def mail_report(changes: list[dict], summary: dict, semantic: dict | None = None) -> bool:
     required = ["SMTP_HOST", "SMTP_USERNAME", "SMTP_PASSWORD", "REPORT_EMAIL_TO"]
     if not all(os.getenv(k) for k in required):
         return False
@@ -230,6 +269,28 @@ def mail_report(changes: list[dict], summary: dict) -> bool:
         for c in entry.get("suggestions", []):
             lines.append("  • " + c["concept"] + " → " + c["suggested_parent"] + " (" + c["confidence"] + ", review required)")
         lines.append("")
+    if semantic:
+        lines += ["", "=== LLM SEMANTIC PROPOSALS — REVIEW REQUIRED ==="]
+        for entry in changes:
+            proposal = semantic.get(entry.get("page_key"))
+            if not proposal:
+                continue
+            lines += ["NOTE: " + entry["title"], entry.get("url", "")]
+            for concept in proposal["concepts"]:
+                lines.append("  CONCEPT: " + concept["name"] +
+                             " → " + concept["parent_id"] +
+                             " (" + concept["confidence"] + ")")
+                lines.append("    " + concept["definition"])
+                for evidence in concept["evidence"]:
+                    lines.append("    Evidence block " + evidence["block_id"] +
+                                 ": " + evidence["quote"])
+            for relation in proposal["relations"]:
+                lines.append("  RELATION: " + relation["source"] + " " +
+                             relation["type"] + " " + relation["target"])
+                for evidence in relation["evidence"]:
+                    lines.append("    Evidence block " + evidence["block_id"] +
+                                 ": " + evidence["quote"])
+            lines.append("")
     msg = EmailMessage()
     msg["Subject"] = "AI & ML Knowledge Digest — " + dt.date.today().isoformat()
     msg["From"] = os.getenv("REPORT_EMAIL_FROM") or os.environ["SMTP_USERNAME"]
@@ -279,9 +340,11 @@ def main() -> None:
     if warnings:
         # Keep the old state when the scan is incomplete: no false deletions or resets.
         raise SystemExit("Incomplete Notion scan: manifest unchanged; " + "; ".join(warnings))
+    # Do not transmit private content to the model or email in DRY_RUN.
+    semantic = {} if DRY_RUN else extract_semantic_changes(old, new, changes, pages, summary)
     if not DRY_RUN:
-        # Deliver report first, before advancing the manifest.
-        emailed = mail_report(changes, summary)
+        # Deliver private review proposals before advancing the manifest.
+        emailed = mail_report(changes, summary, semantic)
         STATE.parent.mkdir(exist_ok=True, parents=True)
         STATE.write_text(json.dumps(new, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     else:
