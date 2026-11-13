@@ -64,6 +64,16 @@ jobs:
             git commit -m "chore: refresh curated graph source metadata"
             git push
           fi
+      - name: Sync curated nodes to private Notion Node Registry
+        env:
+          NOTION_NODE_REGISTRY_TOKEN: ${{ secrets.NOTION_NODE_REGISTRY_TOKEN }}
+          NOTION_NODE_REGISTRY_DATA_SOURCE_ID: ${{ vars.NOTION_NODE_REGISTRY_DATA_SOURCE_ID }}
+        run: |
+          if [ -n "$NOTION_NODE_REGISTRY_TOKEN" ] && [ -n "$NOTION_NODE_REGISTRY_DATA_SOURCE_ID" ]; then
+            python3 knowledge-graph/sync_node_registry.py
+          else
+            echo "Node Registry integration not configured; skipping registry sync." >> "$GITHUB_STEP_SUMMARY"
+          fi
       - name: Mark committed queue items as Published
         if: ${{ steps.review.outputs.applied != '' }}
         env:
