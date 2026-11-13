@@ -2,7 +2,7 @@
 
 ## Goal
 
-Keep the AI & ML knowledge atlas current while maintaining Notion as the authoritative document store. New or modified content is evaluated for potential concepts, but the source workspace is not changed automatically.
+Maintain a workspace-wide Personal Knowledge Atlas, starting with AI & ML and multiple independent Notion source roots, while retaining Notion as the authoritative document store. New or modified content is evaluated for potential concepts, but the source workspace is not changed automatically.
 
 ## Workflow
 
@@ -24,7 +24,7 @@ flowchart LR
   P -. human approval in future .-> G
 ```
 
-### Current source roots
+### Current source roots (one AI & ML semantic domain; see [Workspace taxonomy](workspace-taxonomy.md))
 
 - Machine Learning
 - LLM Finetuning
