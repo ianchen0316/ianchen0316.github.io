@@ -8,6 +8,7 @@
 
 - [Architecture](architecture.md) — components, data flow, graph publishing boundary, sync strategy
 - [Workspace taxonomy](workspace-taxonomy.md) — source-root registration, merging Notion sections into semantic domains, future expansion
+- [Node Registry](node-registry.md) — canonical nodes, properties, tags, multiple source pages, and breakdown review
 - [Operations](operations.md) — setup, daily operation, security, reporting, troubleshooting
 - [Data model](data-model.md) — node types, edge types, provenance, manifest, review lifecycle
 - [LLM semantic extraction](semantic-extraction.md) — OpenAI structured outputs, evidence validation, private delivery
@@ -19,6 +20,8 @@
 |---|---|
 | Interactive graph with node inspector | Implemented |
 | 50 curated nodes and 22 semantic/source mappings | Implemented |
+| Notion Node Registry with multiple page sources and breakdown recommendations | Created and populated (50 rows) |
+| Optional graph-to-Notion Node Registry metadata sync | Implemented; requires integration credentials |
 | Read-only Notion crawling including nested blocks | Implemented |
 | Content fingerprinting and incremental page diff | Implemented |
 | Candidate classification from headings | Implemented (keyword heuristic only) |
