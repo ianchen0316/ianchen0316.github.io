@@ -15,6 +15,7 @@ flowchart LR
   L --> V[Evidence/endpoint verification]
   V --> Q[Private Notion review queue]
   Q --> A[Human approval / merge]
+  S --> NR[Private Notion Node Registry]
   A --> S[Reviewed public graph]
   V --> P[Private review digest]
   C --> P
@@ -47,6 +48,8 @@ knowledge-graph/
   maintain.py            Notion crawler, page diff, candidate digest
   semantic_extract.py     Strict LLM extraction and evidence validation
   review_queue.py         Private Notion candidates + approved graph publisher
+  sync_node_registry.py  Graph-owned fields → private canonical Node Registry
+  test_node_registry.py  Non-destructive registry synchronization tests
   finalize_published.py  Notion review status finalization
   test_review_queue.py    Offline publishing tests
   test_semantic_extract.py Offline provenance tests
