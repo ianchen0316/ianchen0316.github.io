@@ -45,6 +45,10 @@ See [LLM semantic extraction](semantic-extraction.md) for evidence validation, p
 
 The private database **AI & ML — Concept Review Queue** has been created in Notion. In GitHub Actions add the secret `NOTION_REVIEW_TOKEN` (a separate Notion integration with read, insert and update access only to that database) and variable `NOTION_REVIEW_DATA_SOURCE_ID` (from the Notion database's data-source settings). New LLM proposals are enqueued automatically when configured. Changing a row to Approved or Merge publishes approved metadata to the public graph during the next run; Rejected stays private. See [review queue](review-queue.md).
 
+## 2c. Enable the Node Registry synchronization
+
+A [Node Registry database](https://app.notion.com/p/0a30f98a97504d46ac38645b24f7ac1f) now lives under the top-level project hub. It contains canonical graph nodes, tags, multiple linked source pages, and explicit breakdown review status. Add GitHub secret `NOTION_NODE_REGISTRY_TOKEN` and variable `NOTION_NODE_REGISTRY_DATA_SOURCE_ID` = `c38207ac-27b1-4e42-a938-c26da54d6613`. The corresponding Notion integration needs read, insert and update access to this database only. The workflow will add missing approved nodes and synchronize graph-owned name/type/parent/summary fields, without overwriting hand-curated tags, source links, or breakdown decisions. See [Node Registry](node-registry.md).
+
 ## 3. Review a run
 
 - Open the Actions run summary for pages scanned and counts added/modified/potentially missing.
