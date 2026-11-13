@@ -2,6 +2,9 @@
 
 ## Graph node
 
+Source organization is separate from the semantic hierarchy: multiple top-level Notion collections (Machine Learning and LLM Finetuning) map to the same `ml` domain. The public graph has distinct Source/Note nodes representing course notes without duplicating canonical concepts. See [Workspace taxonomy](workspace-taxonomy.md).
+
+
 Current public graph nodes have:
 
 ```json
