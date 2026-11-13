@@ -1,9 +1,10 @@
-# AI & ML Knowledge Atlas
+# Personal Knowledge Atlas — AI & ML Domain
 Interactive, publicly hosted pilot graph of curated AI/ML concepts with metadata and links to original Notion notes.
 
 - Webpage: https://ianchen0316.github.io/knowledge-graph/
-- Notion hub: https://app.notion.com/p/41675fdeb6eb81649a8df5feaa898774
-- 41 curated nodes, 16 candidate semantic links.
+- Notion project hub (now in the Private sidebar root): https://app.notion.com/p/41675fdeb6eb81649a8df5feaa898774
+- Source collections: [Machine Learning](https://www.notion.so/963f79956cee49e0a85707ca6e3a4853) and [LLM Finetuning](https://www.notion.so/3f275fdeb6eb809c8ff0de72173259bb). Both map to the unified AI & ML domain.
+- 50 curated nodes, including 9 source/lecture nodes for the top-level LLM Finetuning collection; 22 candidate or source-mapping semantic links.
 - Node inspector shows summary, ID, hierarchy, review status, extraction method, keywords, source count and related nodes.
 - No full Notion page body is published. **Labels, node summaries, and original source URLs are public.**
 - Notion is the source of truth. The scheduled GitHub Actions workflow uses official Notion REST API and a read-only integration token to scan pages and refresh curated metadata. Newly discovered headings and LLM proposals are not directly published.
