@@ -1,12 +1,13 @@
-# AI & ML Knowledge Graph — Project Documentation
+# Personal Knowledge Atlas — Project Documentation
 
 **Project:** [Public knowledge atlas](https://ianchen0316.github.io/knowledge-graph/)  
 **Notion hub:** [AI & ML Knowledge Graph](https://app.notion.com/p/41675fdeb6eb81649a8df5feaa898774)  
-**Scope:** Read-only incremental maintenance of the AI/ML section of Notion, curated graph metadata, and private review reports.
+**Scope:** Workspace-wide knowledge atlas, currently piloting the AI & ML domain with both the Machine Learning and LLM Finetuning source collections. The project hub now lives in the Notion Private sidebar root.
 
 ## Documents
 
 - [Architecture](architecture.md) — components, data flow, graph publishing boundary, sync strategy
+- [Workspace taxonomy](workspace-taxonomy.md) — source-root registration, merging Notion sections into semantic domains, future expansion
 - [Operations](operations.md) — setup, daily operation, security, reporting, troubleshooting
 - [Data model](data-model.md) — node types, edge types, provenance, manifest, review lifecycle
 - [LLM semantic extraction](semantic-extraction.md) — OpenAI structured outputs, evidence validation, private delivery
@@ -17,7 +18,7 @@
 | Feature | Status |
 |---|---|
 | Interactive graph with node inspector | Implemented |
-| 41 curated nodes and 16 candidate links | Implemented |
+| 50 curated nodes and 22 semantic/source mappings | Implemented |
 | Read-only Notion crawling including nested blocks | Implemented |
 | Content fingerprinting and incremental page diff | Implemented |
 | Candidate classification from headings | Implemented (keyword heuristic only) |
