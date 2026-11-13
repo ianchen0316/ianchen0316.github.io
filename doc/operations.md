@@ -8,12 +8,12 @@ Cron: `30 1 * * *` = 09:30 Asia/Taipei (UTC+8). GitHub's scheduled runs can be d
 ## 1. Create a Notion integration
 
 1. In Notion integrations, create an integration with **Read content** capability.
-2. Grant the integration explicit access to the selected AI & ML root pages and relevant descendants.
+2. Grant the integration explicit access to both top-level **Machine Learning** and **LLM Finetuning** source roots, along with other enabled AI & ML roots and relevant descendants.
 3. Copy its token. **Never commit the token.**
 4. In GitHub repository **Settings → Secrets and variables → Actions**, create the secret `NOTION_TOKEN`.
 5. Trigger the workflow manually using **Run workflow** and review its summary.
 
-The Notion integration is read-only; this pipeline does not create, move, delete or edit Notion pages. Do not give it write permission just for this workflow.
+The Notion source integration is read-only; this pipeline does not create, move, delete or edit source Notion pages. The separate project hub is now at the top-level Private sidebar, while the private review database is maintained separately. Do not give it write permission just for this workflow.
 
 ## 2. Optional private daily email
 
@@ -82,6 +82,10 @@ The state manifest is committed only by the workflow after a successful non-dry-
 | No email report | Configure SMTP secrets, recipient and port |
 | Website outdated | Inspect GitHub Pages build and confirm latest commit |
 | Unexpected new concepts | Review only; the crawler will not publish them automatically |
+
+## Adding another section
+
+See [Workspace taxonomy](workspace-taxonomy.md). New source roots should be explicitly registered with a semantic domain rather than assumed to be new public domain nodes. The current LLM Finetuning source is already present in the crawler and now represented explicitly in the curated graph.
 
 ## 7. Next engineering tasks
 
