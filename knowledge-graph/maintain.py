@@ -27,12 +27,15 @@ from urllib.request import Request, urlopen
 HERE = Path(__file__).resolve().parent
 STATE = HERE / "state" / "manifest.json"
 SITE = HERE / "index.html"
-ROOTS = {
-    "ml": "963f7995-6cee-49e0-a857-07ca6e3a4853",
-    "llm": "3f275fde-b6eb-809c-8ff0-de72173259bb",
-    "agents": "28f75fde-b6eb-8048-9783-cf7af2337650",
-    "kg": "19e75fde-b6eb-80bc-bb83-f5c1c80a6e09",
+# Explicit source-root registry: more than one source collection can feed
+# the same semantic domain. Keep original Notion pages in place.
+SOURCE_ROOTS = {
+    "machine-learning": {"page_id": "963f7995-6cee-49e0-a857-07ca6e3a4853", "domain_id": "ml"},
+    "llm-finetuning": {"page_id": "3f275fde-b6eb-809c-8ff0-de72173259bb", "domain_id": "ml"},
+    "agentic-ai": {"page_id": "28f75fde-b6eb-8048-9783-cf7af2337650", "domain_id": "ml"},
+    "knowledge-graphs": {"page_id": "19e75fde-b6eb-80bc-bb83-f5c1c80a6e09", "domain_id": "ml"},
 }
+ROOTS = {name: config["page_id"] for name, config in SOURCE_ROOTS.items()}
 MAX_PAGES = int(os.getenv("NOTION_MAX_PAGES", "250"))
 MAX_BLOCK_DEPTH = int(os.getenv("NOTION_MAX_BLOCK_DEPTH", "5"))
 NOTION_TOKEN = os.getenv("NOTION_TOKEN", "")
