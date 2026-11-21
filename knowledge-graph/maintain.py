@@ -31,7 +31,8 @@ SITE = HERE / "index.html"
 # the same semantic domain. Keep original Notion pages in place.
 SOURCE_ROOTS = {
     "machine-learning": {"page_id": "963f7995-6cee-49e0-a857-07ca6e3a4853", "domain_id": "ml"},
-    "llm-finetuning": {"page_id": "3f275fde-b6eb-809c-8ff0-de72173259bb", "domain_id": "ml"},
+    "llm-finetuning": {"page_id": "3f275fde-b6eb-809c-8ff0-de72173259bb", "domain_id": "llm-domain"},
+    "large-language-model": {"page_id": "41f75fde-b6eb-812e-aac8-d3fbf4bc31e4", "domain_id": "llm-domain"},
     "agentic-ai": {"page_id": "28f75fde-b6eb-8048-9783-cf7af2337650", "domain_id": "ml"},
     "knowledge-graphs": {"page_id": "19e75fde-b6eb-80bc-bb83-f5c1c80a6e09", "domain_id": "ml"},
 }
