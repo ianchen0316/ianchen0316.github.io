@@ -22,7 +22,7 @@ NOTION_VERSION = "2025-09-03"
 QUEUE_ID = os.getenv("NOTION_REVIEW_DATA_SOURCE_ID", "")
 TOKEN = os.getenv("NOTION_REVIEW_TOKEN", "")
 ALLOWED_TYPES = {"PREREQUISITE_OF", "IS_A", "RELATED_TO", "PART_OF", "APPLIED_IN", "EXPLAINS"}
-TOPICS = {"ml", "supervised", "unsupervised", "rl", "llm", "llm-found", "posttrain", "agents", "rag", "kg"}
+TOPICS = {"ml", "llm-domain", "supervised", "unsupervised", "rl", "llm", "llm-found", "posttrain", "agents", "rag", "kg"}
 PROPOSAL_STATES = {"Proposed", "Needs Review"}
 MAX_ITEMS = 250
 
@@ -227,7 +227,7 @@ def apply_reviews(graph: dict, rows: list[dict]) -> tuple[dict, dict, list[str],
             if not prior_by_id:
                 node = {
                     "id": node_id, "label": label[:100], "type": "concept",
-                    "parent": parent, "description": prop(row, "Definition")[:600],
+                    "parent": parent, "domain": ("Large Language Model" if parent in {"llm-domain", "llm", "llm-found", "posttrain"} else "AI & ML"), "description": prop(row, "Definition")[:600],
                     "keywords": label.lower().split()[:8], "url": url or None,
                     "source_pages": [], "origin": "notion_review",
                     "extraction_method": "llm_reviewed", "review_status": "approved",
