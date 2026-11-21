@@ -83,7 +83,7 @@ def owned_fields(node: dict) -> dict:
         "Name": title_prop(node.get("label", "")),
         "Node ID": text_prop(node["id"]),
         "Node Type": {"select": {"name": node["type"].capitalize()}},
-        "Domain": {"select": {"name": "AI & ML"}},
+        "Domain": {"select": {"name": node.get("domain", "AI & ML")}},
         "Parent ID": text_prop(node.get("parent") or ""),
         "Summary": text_prop(node.get("description") or ""),
     }
@@ -145,7 +145,7 @@ def plan_changes(nodes: list[dict], rows: list[dict]) -> tuple[list[dict], list[
                 target = node.get("label", "")
             elif name in ("Node Type", "Domain"):
                 value = (p.get("select") or {}).get("name", "")
-                target = node["type"].capitalize() if name == "Node Type" else "AI & ML"
+                target = node["type"].capitalize() if name == "Node Type" else node.get("domain", "AI & ML")
             else:
                 value = get_text(row, name)
                 target = node.get("parent") or "" if name == "Parent ID" else node.get("description") or ""
