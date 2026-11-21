@@ -1,4 +1,4 @@
-# Personal Knowledge Atlas — AI & ML Domain
+# Personal Knowledge Atlas — AI & ML and Large Language Model
 Interactive, publicly hosted pilot graph of curated AI/ML concepts with metadata and links to original Notion notes.
 
 - Webpage: https://ianchen0316.github.io/knowledge-graph/
@@ -19,6 +19,10 @@ Interactive, publicly hosted pilot graph of curated AI/ML concepts with metadata
 6. Before enabling refresh, review publication risk: discovered page titles and links will be visible publicly.
 
 This is one-way sync (Notion → public site), and the pipeline does not edit Notion. **Opt-in LLM semantic extraction is implemented** for changed notes using `OPENAI_API_KEY`, with strict JSON schema, block-quote evidence verification and private SMTP email for review. LLM proposals are **not** published automatically. See [project documentation](../doc/README.md) and [semantic extraction](../doc/semantic-extraction.md). Notion embeds need the host to allow framing; otherwise use a regular page link.
+
+## Large Language Model learning domain
+
+The new [Large Language Model Notion root](https://app.notion.com/p/41f75fdeb6eb812eaac8d3fbf4bc31e4) contains the existing Tokenization and LLM Architecture learning hubs. Both main nodes and all their graph descendants are tagged with the `Large Language Model` domain. The centralized Node Registry remains under the Personal Knowledge Atlas hub. See [migration docs](../doc/large-language-model-domain.md).
 
 ## Notion Node Registry
 
