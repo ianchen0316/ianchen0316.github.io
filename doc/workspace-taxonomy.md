@@ -4,6 +4,10 @@
 
 The **Personal Knowledge Atlas** is a workspace-wide semantic knowledge index sourced from Notion. Its project coordination hub lives in the **top-level Private sidebar**, not inside any particular subject collection. The interactive site currently publishes the **AI & Machine Learning** pilot; additional Notion domains will be onboarded incrementally.
 
+## New Large Language Model domain (2026-11-21)
+
+The new top-level Notion [Large Language Model](https://app.notion.com/p/41f75fdeb6eb812eaac8d3fbf4bc31e4) page now contains the Tokenization and LLM Architecture learning hubs. Their concepts and descendants are classified as **Large Language Model**, with domain graph ID `llm-domain`. The original LLM Finetuning source collection remains separate and maps to this domain for future extraction. Other Machine Learning notes remain under **AI & ML**. This supersedes the initial pilot's flat mapping of every LLM node to AI & ML. See [migration details](large-language-model-domain.md).
+
 ## Two layers of organization
 
 Notion's page hierarchy is the **source structure** and does not necessarily match the **concept taxonomy**. We keep both rather than rearranging the user's personal learning notes.
@@ -22,7 +26,8 @@ flowchart LR
 | Notion root | Root page ID | Semantic domain | Notes |
 |---|---|---|---|
 | Machine Learning | `963f7995-6cee-49e0-a857-07ca6e3a4853` | `ml` (AI & ML) | Initial ML, RL, LLM notes |
-| LLM Finetuning | `3f275fde-b6eb-809c-8ff0-de72173259bb` | `ml` (AI & ML) | CME295 + CS336, tokenization, training |
+| LLM Finetuning | `3f275fde-b6eb-809c-8ff0-de72173259bb` | `llm-domain` (Large Language Model) | CME295 + CS336 original source notes |
+| Large Language Model | `41f75fde-b6eb-812e-aac8-d3fbf4bc31e4` | `llm-domain` (Large Language Model) | Tokenization and LLM Architecture learning hubs |
 | Agentic AI | `28f75fde-b6eb-8048-9783-cf7af2337650` | `ml` (AI & ML) | Agent workflows |
 | Neo4j | `19e75fde-b6eb-80bc-bb83-f5c1c80a6e09` | `ml` (AI & ML) | Knowledge graphs, Cypher, GraphRAG |
 
