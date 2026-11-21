@@ -55,6 +55,17 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(updates,[])
         self.assertEqual(creates[0]["Breakdown"]["select"]["name"],"Not assessed")
 
+    def test_large_language_model_domain_is_not_overwritten(self):
+        n={"id":"token","label":"Tokenization","type":"concept",
+           "parent":"llm-found","description":"Old",
+           "domain":"Large Language Model"}
+        creates,updates=r.plan_changes([n],[row()])
+        self.assertEqual(creates,[])
+        self.assertEqual(len(updates),1)
+        self.assertEqual(updates[0][1]["Domain"]["select"]["name"],"Large Language Model")
+        self.assertNotIn("Tags",updates[0][1])
+        self.assertNotIn("Source Pages",updates[0][1])
+
     def test_duplicate_registry_id_rejected(self):
         with self.assertRaises(ValueError):
             r.plan_changes([], [row(),row()])
