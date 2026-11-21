@@ -8,6 +8,10 @@ The **Knowledge Atlas — Node Registry** is a Notion database nested under the 
 - Five initially have **more than one Notion source**; three are flagged as **breakdown candidates**.
 - All values were seeded from the curated public graph, with additional course-note associations grounded in the reviewed Notion source structure. This is not a completed workspace-wide semantic audit.
 
+## Large Language Model domain
+
+The registry Domain Select now includes **Large Language Model**. The Node Registry tracks the new `llm-domain` node and all existing LLM-subtree nodes under that domain, including Tokenization (`token`) and LLM Architecture (`llm-architecture`). The new Notion learning root is separate from this centralized registry: [Large Language Model](https://app.notion.com/p/41f75fdeb6eb812eaac8d3fbf4bc31e4). The synchronization script uses each node's explicit graph `domain`, so it will no longer overwrite these values with AI & ML. See [migration](large-language-model-domain.md).
+
 ## Purpose
 
 A **canonical concept** may be described by many independent Notion pages. Do not create duplicate concept rows simply because another note covers it. Keep the registry node ID stable and attach multiple source pages to the existing canonical node.
@@ -29,7 +33,7 @@ flowchart LR
 | Name | Title | Graph-owned |
 | Node ID | Text | Immutable key from graph |
 | Node Type | Select | Graph-owned: Domain/Topic/Concept/Source/Note/Tool |
-| Domain | Select | Currently AI & ML |
+| Domain | Select | AI & ML or Large Language Model (other domains reserved) |
 | Parent ID | Text | Graph-owned hierarchy |
 | Summary | Text | Curated graph description |
 | Tags | Multi-select | Human-maintained |
