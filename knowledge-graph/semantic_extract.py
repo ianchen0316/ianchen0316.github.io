@@ -15,7 +15,7 @@ from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
-PARENT_IDS = ["ml", "supervised", "unsupervised", "rl", "llm",
+PARENT_IDS = ["ml", "llm-domain", "supervised", "unsupervised", "rl", "llm",
               "llm-found", "posttrain", "agents", "rag", "kg"]
 RELATION_TYPES = ["PREREQUISITE_OF", "IS_A", "RELATED_TO",
                   "PART_OF", "APPLIED_IN", "EXPLAINS"]
