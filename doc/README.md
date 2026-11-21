@@ -7,6 +7,7 @@
 ## Documents
 
 - [Architecture](architecture.md) — components, data flow, graph publishing boundary, sync strategy
+- [Large Language Model domain](large-language-model-domain.md) — Tokenization and LLM Architecture taxonomy, Notion root, registry updates
 - [Workspace taxonomy](workspace-taxonomy.md) — source-root registration, merging Notion sections into semantic domains, future expansion
 - [Node Registry](node-registry.md) — canonical nodes, properties, tags, multiple source pages, and breakdown review
 - [Operations](operations.md) — setup, daily operation, security, reporting, troubleshooting
